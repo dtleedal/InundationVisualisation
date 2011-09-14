@@ -1,4 +1,18 @@
 ******* Inundation Visualisation tool for Google Maps ********
 
-This tool is a web based program to overlay png inundation maps onto google  maps
+This project is intended to provide a web based program to overlay png inundation maps onto google maps. The inundation viewer is interactive and easy to use. The tool makes use of dynamic HTML methods primarily JavaScript and the Google Maps (ª) API. The tool makes use of the JQuery and JSON JavaScript libraries.
+
+The main script i.e., the HTML document that the user initially loads is called visualisation.html
+
+This HTML file sets up and calls all the necessary JavaScript files. As such when attempting to follow, edit, hack, or implement the visualisation tool, this is the file to start from.
+
+The json2.js file is a library of JavaScript files that implement the JSON text file to JavaScript object process.
+
+JSONrun.js is a file that actually loads the text file data contained in the JSONdata folder (this was made by a separate Python program - email me for details) into a JavaScript array object
+
+chooseOverlayFunction.js is a function that is called when the sliders move. It makes different overlays visible/invisible and changes the description text box contents.
+
+Overlay2.js calls functions to load the JSON data and set up the google map and build arrays of overlays.
+
+ 
 
