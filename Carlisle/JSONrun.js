@@ -49,16 +49,14 @@ function responseAjax(){
     }
   }
 }
-//myRequest = getXMLHttpRequest();
-//callAjax("JSONfile1.txt");
-//inundation = JSON.parse(myRequest.responseText);
-//for (var i=1;i<16;i++){
-//  callAjax("levelEx"+i+".txt");
-//  eval("levelEx"+i+" = JSON.parse(myRequest.responseText);");
-//  }
 
 
 
+//the getProb function takes the lat and long coordinates of the map marker as input,
+//it checks to see if they are within the bounding area of the model domain. If not it places a zero in each
+//element of the levelExProb array
+//If it is within then it converts the lat long coords to an x,y array index into the inundationData matrix and extracts
+//the 16 values and puts them in an array. These can then be sent to the google chart api for plotting.
 
 
 //alert(inundation.swBounds[0] + " " + inundation.swBounds[1]);
@@ -89,7 +87,7 @@ if (latPos<this.swBounds[0] || latPos>this.neBounds[0] || lngPos<this.swBounds[1
          eval("levelExProb[i-1] = (levelEx"+i+".inundationData[latIndex][lngIndex]*100).toFixed(0);");
        }
     }
-//alert(probVal);
+//these are the things added to the inundation object
   this.latIndex = latIndex;
   this.lngIndex = lngIndex;
   this.probVal = probVal;

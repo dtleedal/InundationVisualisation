@@ -7,7 +7,7 @@
 
 
 
-
+//the functions getXMLHttpRequest, getProb and callAjax are defined in the file JSONrun.js
 
 
   function initialize() {
@@ -18,6 +18,7 @@
     callAjax("JSONfile1.txt");
     inundation = JSON.parse(myRequest.responseText);
     inundation.getProbs = getProb;
+    // a big TODO is to make the number of inundation depths a variable so we are not limited to 16
     for (var i=1;i<16;i++){
       callAjax("levelEx"+i+".txt");
       eval("levelEx"+i+" = JSON.parse(myRequest.responseText);");
@@ -30,7 +31,8 @@
 // these are the old bounds not used any more but kept incase needed    
     var swBound = new google.maps.LatLng(54.883328, -2.960299);
     var neBound = new google.maps.LatLng(54.911061,  -2.886389);
-//these are the new bounds for the new carlisle overlays done in grass
+//these are the new bounds for the new carlisle overlays done in grass and loaded into the JSON object text file
+//(take a look at one of the levelEXn.txt files to see the format for a JSON file 
     var swBoundsGrass = new google.maps.LatLng(inundation.swBounds[0],inundation.swBounds[1]);
     var neBoundsGrass = new google.maps.LatLng(inundation.neBounds[0],inundation.neBounds[1]);
     var boundsGrass = new google.maps.LatLngBounds(swBoundsGrass, neBoundsGrass);
@@ -70,6 +72,11 @@
        var lngPos = contentSet.lng();
        var latPos = contentSet.lat();
        inundation.getProbs(latPos,lngPos);
+
+//the inundation exceedence graph attached to the marker is done using the Google chart api. It's not too 
+//difficult but you need to look at the web pages at http://code.google.com/apis/chart/interactive/docs/quick_start.html
+
+
        contentText = '<div id="disclaimerText">lat = ' + latPos.toFixed(3) + 
                      ' lng = ' + lngPos.toFixed(3) + 
                      '<br>' + 'Larger inundation likelihood: ' +
@@ -114,12 +121,10 @@ google.maps.event.addListener(map, 'click', function(myEvent){
        infowindow.setOptions({maxWidth:2000});
      }); 
     // probability png's generated in python
-   // srcImage =    ['5thPercentile.png','10thPercentile.png','20thPercentile.png','30thPercentile.png','40thPercentile.png','50thPercentile.png','60thPercentile.png','70thPercentile.png','80thPercentile.png','90thPercentile.png','95thPercentile.png','testKMLOverlay.png'];
-    //var srcImageArray = "";
-    //var overlayText = 0;
+   
     
-    overlay = new Array(100);
-    allOverlay = new Array(16); 
+    overlay = new Array(100);// make a potential 100 overlay array. If the probIncrement is greater than 1 then some will be skipped.
+    allOverlay = new Array(16); //make room for 16 probability of exceedence depth overlays
     for (var whichDepth = 1; whichDepth<17; whichDepth++){
        var folderName = ((whichDepth-1)*10)+"cm/";
        overlay[whichDepth-1] = new Array(100);
@@ -135,7 +140,8 @@ google.maps.event.addListener(map, 'click', function(myEvent){
     
  
     }
-   
+   // we end up with a big 2D array of inundation overlays and a 16 ellement 1D array of all probability map overlays
+   // we can then select an overlay from these arrays for example: overlay[2][50].show(); will show the second depth increment (5cm) and the 50th percentile. 
  
  
    initialized=1;
@@ -144,6 +150,8 @@ google.maps.event.addListener(map, 'click', function(myEvent){
    
   }
  
+
+//this is all the standard Google Maps code from the Google Maps examples
 
   function MexOverlay(bounds, image, map) {
  
@@ -252,7 +260,7 @@ google.maps.event.addListener(map, 'click', function(myEvent){
     }
   }
 
-// function to switch off loading animation
+// function to switch off loading animation this is called when the map has loaded
 function switchOffAnimation(){
     
     var el2Id=document.getElementById("loadingText");
