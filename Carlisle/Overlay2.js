@@ -1,24 +1,22 @@
 
- oldIndex = 0;//set up a global value for the first overlay to erase
- oldDepthIndex = 0; 
- probIncrement = 4;//the increment in the probability to make more or fewer overlay objects (min 1) 
+ 
+ 
  MexOverlay.prototype = new google.maps.OverlayView();
  google.maps.event.addDomListener(window,'load', initialize);
 
 
 
-//the functions getXMLHttpRequest, getProb and callAjax are defined in the file JSONrun.js
+
 
 
   function initialize() {
     countOverlays = 0;
-    var loadDiv = document.getElementById("loadingAnimation");//the div for the 'loading' text
+    
     //load the inundation probabilities into a set of matrices
     myRequest = getXMLHttpRequest();
     callAjax("JSONfile1.txt");
     inundation = JSON.parse(myRequest.responseText);
     inundation.getProbs = getProb;
-    // a big TODO is to make the number of inundation depths a variable so we are not limited to 16
     for (var i=1;i<16;i++){
       callAjax("levelEx"+i+".txt");
       eval("levelEx"+i+" = JSON.parse(myRequest.responseText);");
@@ -29,14 +27,13 @@
    
    
 // these are the old bounds not used any more but kept incase needed    
-    var swBound = new google.maps.LatLng(54.883328, -2.960299);
-    var neBound = new google.maps.LatLng(54.911061,  -2.886389);
-//these are the new bounds for the new carlisle overlays done in grass and loaded into the JSON object text file
-//(take a look at one of the levelEXn.txt files to see the format for a JSON file 
+//    var swBound = new google.maps.LatLng(54.883328, -2.960299);
+//    var neBound = new google.maps.LatLng(54.911061,  -2.886389);
+//these are the new bounds for the new carlisle overlays done in grass
     var swBoundsGrass = new google.maps.LatLng(inundation.swBounds[0],inundation.swBounds[1]);
     var neBoundsGrass = new google.maps.LatLng(inundation.neBounds[0],inundation.neBounds[1]);
     var boundsGrass = new google.maps.LatLngBounds(swBoundsGrass, neBoundsGrass);
-    var bounds = new google.maps.LatLngBounds(swBound, neBound);
+//    var bounds = new google.maps.LatLngBounds(swBound, neBound);
     //var myLatLng = bounds.getCentre();
     var myLatLng = new google.maps.LatLng(54.8973945, -2.9233325);
     var myOptions = {
@@ -51,9 +48,9 @@
     map.setZoom( map.getZoom() );
  
     var markA = new google.maps.Marker({position: myLatLng, map: map, title:"point picker", draggable: true});
-    var contentsStringOnload = '<div id="disclaimerText"><b>Welcome!</b><br>Use the control in the top panel<br>'+
-                        'to change map overlays.<br>'+
-                        'Use this marker to view the data at<br>'+
+    var contentsStringOnload = '<div id="disclaimerText"><b>Welcome!</b><br>Use the controls in the top panel<br>'+
+                        'to specify map overlays.<br>'+
+                        'Use this marker to view depth data at<br>'+
                         'a specific point</div>';  
     
     var infowindow = new google.maps.InfoWindow();
@@ -72,11 +69,6 @@
        var lngPos = contentSet.lng();
        var latPos = contentSet.lat();
        inundation.getProbs(latPos,lngPos);
-
-//the inundation exceedence graph attached to the marker is done using the Google chart api. It's not too 
-//difficult but you need to look at the web pages at http://code.google.com/apis/chart/interactive/docs/quick_start.html
-
-
        contentText = '<div id="disclaimerText">lat = ' + latPos.toFixed(3) + 
                      ' lng = ' + lngPos.toFixed(3) + 
                      '<br>' + 'Larger inundation likelihood: ' +
@@ -92,13 +84,11 @@ google.maps.event.addListener(markA, 'drag', function() {
        var lngPos = contentSet.lng();
        var latPos = contentSet.lat();
        inundation.getProbs(latPos,lngPos);
-       contentText = '<div id="disclaimerText">lat = ' + latPos.toFixed(3) + 
-                     ' lng = ' + lngPos.toFixed(3) + 
-                     '<br>' + 'Larger inundation likelihood: ' +
-                     inundation.probVal + '%' +
+       contentText = '<div id="disclaimerText">Position = (' + latPos.toFixed(3) + 
+                     ',' + lngPos.toFixed(3) + ')' +
                      '<br>' + '<b>Likelihood of depth ' +
-                                  'being exceeded</b><br>' +
-                      '<img src="http://chart.apis.google.com/chart?chs=210x110&cht=lc&chxt=x,x,y,y&chxr=0,0,150,25|2,0,100,20&chxl=1:|depth(cm)|3:|%&chxp=1,50|3,50&chco=FF0000&chds=0,100&chd=t:'+inundation.probStr+','+inundation.levelExProb+'&chg=25,20,5,2&chls=2&chma=5,5,5,5" width="220" height="110"/></div>';
+                     'being exceeded</b><br>' +
+                     '<img src="http://chart.apis.google.com/chart?chs=210x110&cht=lc&chxt=x,x,y,y&chxr=0,0,150,25|2,0,100,20&chxl=1:|depth(cm)|3:|%&chxp=1,50|3,50&chco=FF0000&chds=0,100&chd=t:'+inundation.probStr+','+inundation.levelExProb+'&chg=25,20,5,2&chls=2&chma=5,5,5,5" width="220" height="110"/></div>';
        infowindow.setContent(contentText);
         infowindow.setOptions({maxWidth:2000});    
     }); 
@@ -110,25 +100,26 @@ google.maps.event.addListener(map, 'click', function(myEvent){
        
        
        inundation.getProbs(latPos,lngPos);
-       contentText = '<div id="disclaimerText">lat = ' + latPos.toFixed(3) + 
-                     ' lng = ' + lngPos.toFixed(3) + 
-                     '<br>' + 'Larger inundation likelihood: ' +
-                     inundation.probVal + '%' +
-                     '<br>' + 'Likelihood of depth ' +
-                                  'being exceeded</b><br>' +
+       contentText = '<div id="disclaimerText">Position = (' + latPos.toFixed(3) + 
+                     ',' + lngPos.toFixed(3) + ')' +
+                     '<br>' + '<b>Likelihood of depth ' +
+                     'being exceeded</b><br>' +
                      '<img src="http://chart.apis.google.com/chart?chs=220x110&cht=lc&chxt=x,x,y,y&chxr=0,0,150,25|2,0,100,20&chxl=1:|depth(cm)|3:|%&chxp=1,50|3,50&chco=FF0000&chds=0,100&chd=t:'+inundation.probStr+','+inundation.levelExProb+'&chg=25,20,5,2&chls=2&chma=5,5,5,5" width="220" height="110"/></div>';
        infowindow.setContent(contentText);
        infowindow.setOptions({maxWidth:2000});
      }); 
     // probability png's generated in python
-   
+   // srcImage =    ['5thPercentile.png','10thPercentile.png','20thPercentile.png','30thPercentile.png','40thPercentile.png','50thPercentile.png','60thPercentile.png','70thPercentile.png','80thPercentile.png','90thPercentile.png','95thPercentile.png','testKMLOverlay.png'];
+    //var srcImageArray = "";
+    //var overlayText = 0;
     
-    overlay = new Array(100);// make a potential 100 overlay array. If the probIncrement is greater than 1 then some will be skipped.
-    allOverlay = new Array(16); //make room for 16 probability of exceedence depth overlays
+    overlay = new Array(100);
+    allOverlay = new Array(16); 
     for (var whichDepth = 1; whichDepth<17; whichDepth++){
        var folderName = ((whichDepth-1)*10)+"cm/";
+       
        overlay[whichDepth-1] = new Array(100);
-       for (whichPercentile = 0; whichPercentile<100; whichPercentile=whichPercentile+probIncrement){
+       for (whichPercentile=5; whichPercentile<96; whichPercentile=whichPercentile+probIncrement){
            
            
            
@@ -140,8 +131,7 @@ google.maps.event.addListener(map, 'click', function(myEvent){
     
  
     }
-   // we end up with a big 2D array of inundation overlays and a 16 ellement 1D array of all probability map overlays
-   // we can then select an overlay from these arrays for example: overlay[2][50].show(); will show the second depth increment (5cm) and the 50th percentile. 
+   
  
  
    initialized=1;
@@ -150,8 +140,6 @@ google.maps.event.addListener(map, 'click', function(myEvent){
    
   }
  
-
-//this is all the standard Google Maps code from the Google Maps examples
 
   function MexOverlay(bounds, image, map) {
  
@@ -260,7 +248,7 @@ google.maps.event.addListener(map, 'click', function(myEvent){
     }
   }
 
-// function to switch off loading animation this is called when the map has loaded
+// function to switch off loading animation
 function switchOffAnimation(){
     
     var el2Id=document.getElementById("loadingText");

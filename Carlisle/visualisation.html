@@ -2,16 +2,25 @@
 Copyright (C) 2010  David Leedal
 hh--bb
 
-This is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version. 
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+    A copy of the GNU General Public License can be found at
+    <http://www.gnu.org/licenses/>.
 -->
 <html> 
+
 <head> 
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> 
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
-<title>Carlisle overlay</title> 
+<title>Carlisle visualisation</title> 
 <!--<script type="text/javascript" src="http://maps.google.com/maps?file=api&v=3&key=ABQIAAAAYMcQMIIVIxW_sbG2a4e0lhSzVbVBwM7Gq0h-akmbFSydigulgxQiWIQsDP6H-Gqs-9Sk8CDAuM8VjQ&sensor=false"></script> -->
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=ABQIAAAAYMcQMIIVIxW_sbG2a4e0lhSzVbVBwM7Gq0h-akmbFSydigulgxQiWIQsDP6H-Gqs-9Sk8CDAuM8VjQ&sensor=false"></script>
 <style type="text/css">
@@ -79,8 +88,6 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 
 
 </style>
-    
-
 <!--[if IE]>
 <style type="text/css">
 #map_canvas {
@@ -91,27 +98,30 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 </style>
 <![endif]-->
 
+<!--<script type="text/javascript">
 
-<!--
- The little bit above catches the situation where the browser is IE and uses a fixed map canvas size instead of a relative size as this is better but doesn't work in IE
- 
- The following JavaScript and one css files are all used by the visualisation tool 
- -->
-<script src="json2.js"></script>
-<script src="JSONrun.js"></script>
-<script src="Overlay2.js"></script>
-<script src="preloadImages.js"></script>
-<script src="chooseOverlayFunction.js"></script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18847419-1']);
+  _gaq.push(['_trackPageview']);
 
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
-<!--
-    The next script sets up the function structures used by JQuery for the sliders, accordion, tabbed browser, and text box
--->
-<script type="text/javascript">
-    
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 
+</script>-->
+</head>
+<body>
+
+
+<script type="text/javascript" src="chooseOverlayFunction.js"></script>
+
+		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+		<script type="text/javascript">
+                        probIncrement = 1;
 			$(function(){
                                 // Accordion
 				$("#accordion").accordion({ header: "h3" });
@@ -122,9 +132,9 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 				// Slider
 				$('#slider').slider({
 					range: "min",
-					value: 0,
-					min: 0,
-					max: 100-probIncrement,
+					value: 15,
+					min: 5,
+					max: 95, 
 					step: probIncrement,
 					slide: function( event, ui ) {
 						$( "#probBox" ).val( ui.value );
@@ -161,17 +171,16 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 		</script>
 
 
-</head> 
+
+ 
+<!--<body style="margin:0px; padding:0px;" onload="initialize()">-->
 
 
 
 
 
-<body>
 
-<!--
- These are the titles and references for the JQuery tabbed browser tabs
- -->
+
        
 
 <div id="tabs">
@@ -179,21 +188,32 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
      <li><a href="#tabs-1">Map tool</a></li>
      <li><a href="#tabs-2">Wiki</a></li>
      <li><a href="#tabs-3">Forum</a></li>
-     <li><a href="#tabs-4">Help</a></li>
+     <li><a href="#tabs-4">About</a></li>
  </ul>
 
 
 
 
 <div id="tabs-1">
-    
-    <!-- 
-     plays the animated loading gif during start up
-     -->
+
+
 <div id="loadingText">
-    preparing overlays...<br>
+<form>
+ <table cellspacing=1 cellpadding=5 border=1 rules=groups frame=void>
+   <tr>
+     <td><textarea name="loadingText" rows="1" cols="40"></textarea></td>
+     <td><img src="ajax-loader.gif" width="50px; height=50px"></td>
+     
+   </tr>
+ </table>
+</form>
+<!--    preparing overlays...
+    <br>
     <img src="ajax-loader.gif" width="50px; height=50px">
+-->
 </div>
+
+
 
 <div id ="toolbar" width="100%; height=15%;"> 
 <form> 
@@ -216,7 +236,8 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 
                  
 		<tr>
-			
+			<!--<td width="40%"></td>
+			<td><textarea name="whichOverlay" rows="1" cols="5"></textarea></td>-->
                         <td><input type="button" name="showAll" value="show all" onclick="showAllInundation()"></td>
                         <td></td>
                         
@@ -227,11 +248,15 @@ body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 2px;}
 </form> 
 </div> <!-- closing toolbar div -->
 
-
+<script src="preloadImages.js"></script>
+<script src="Overlay2.js"></script>
+<script src="json2.js"></script>
+<script src="JSONrun.js"></script>
 <div id="map_canvas"></div>
 
-<div id="mapName" style="font-size: 24pt">100 year flood event estimate for Carlisle</div>
-Disclaimer: this is a visualization research tool. Flood forecast extents are purely for testing purposes.
+
+<div id="mapName" style="font-size: 24pt">1%AEP event estimate for Carlisle</div>
+Disclaimer: this is a visualisation research tool. Flood forecast extents are purely for testing purposes.
 
   <div id="allProbLegend">
     <div id="allProbLegendText">
@@ -242,55 +267,53 @@ Disclaimer: this is a visualization research tool. Flood forecast extents are pu
 
 
 
-<!--
- text and div ids for the accordion section at the bottom of the page
- -->
-
 <p>
 <b>Definitions:</b>
 <br>
 <div id="accordion">
 			<div>
-				<h3><a href="#">Return period</a></h3>
-				<div>The return period is the average amount of time in years that you would expect a flood of a particular size to occur once. For example a flood with a return period of 100 years would be expected to occur 10 times in a century. It is very important to realise that this does not mean that if a flood with a return period has just happened that there will definitely not be another one for 100 years. Also the accuracy with which the return period can be calculated is not perfect so there is always some degree of uncertainty in this value.</div>
+				<h3><a href="#">AEP and return period</a></h3>
+				<div>AEP is the annual exceedence probability. This value expresses the probability (as a percentage) that a flood event will exceed a given magnitude. The reciprocal (100 divided by AEP) gives the average amount of time expected to contain 1 event of the stated magnitude.</div>
 			</div>
 			<div>
 				<h3><a href="#">Percentile</a></h3>
-				<div>Likelihoods can be expressed as percentage values. Here an expression such as "80% chance that the 100 year flood will be larger than that shown..." means the study that estimated the size of the 100 year flood found that 80% (or 8 out of 10) of the acceptable computer simulation results showed a flood larger than the flood shown on the map.</div>
+				<div>Likelihoods can be expressed as percentage values. Here an expression such as "80% chance that the 1%AEP event will be larger than that shown..." means the study that estimated the size of the 1%AEP event found that 80% (or 8 out of 10) of the acceptable computer simulation results showed a flood larger than the flood shown on the map.</div>
 			</div>
 			<div>
 				<h3><a href="#">Likelihood of exceedence</a></h3>
-				<div>This webpage shows that flood extent forecasting can never be exact. This is because flood forecasting is based on computer estimates of what might happen during a real flood. One way to communicate the range of possibilities for what might happen is to  specify the chance that a flood will be bigger than the one shown on the map. For example a likelihood of exceedance of 20% means that the computer simulation estimates that the 100 year flood has a 20% (or 1 in 5) chance of being bigger than the one shown on the map.</div>
+				<div>This webpage shows that flood extent forecasting can never be exact. This is because flood forecasting is based on computer estimates of what might happen during a real flood. One way to communicate the range of possibilities for what might happen is to  specify the chance that a flood will be bigger than the one shown on the map. For example a likelihood of exceedance of 20% means that the computer simulation estimates that the 1%AEP event has a 20% (or 1 in 5) chance of being bigger than the one shown on the map.</div>
 			</div>
 </div>
 <script type="text/javascript"> 
-
-document.forms[0].outputText.value="Choose an inundation overlay using the 'Likelihood selector' slider ";
-
-
+// Javascript for example 1
+//document.forms[0].inundationProb.value="50";
+//document.forms[0].whichOverlay.value="50%";
+//document.forms[0].loadingText.value = 'loading images for '+folderText+'overlays';
+document.forms[1].outputText.value="Choose an inundation overlay using the 'Likelihood selector' slider ";
+document.forms[0].loadingText.value = "loading images and data...";
+//form_widget_amount_slider('slider_target',document.forms[0].inundationProb,200,1,100,"chooseOverlay()");
+//form_widget_amount_slider('slider_target2',document.forms[0].whichDepth,180,0,150,"chooseOverlay()");
+//form_widget_amount_slider('slider_target',document.forms[0].inundationProb,180,1,100,"chooseOverlay()");
 </script> 
 </div><!--end div tag for first tab content --> 
-    
-    <!--
-     set up and link to the second tab page which is the wiki
-     -->
 
 <div id="tabs-2"><iframe src="http://www.carlisle-flood-visualisation.wikispaces.com/" width="100%" height="1000px">
   <p>Your browser does not support iframes.</p>
 </iframe></div>
-    <!--
-     set up and link to the third tab page which is the phpBB bulletin board tool: you might want to remove this as it requires you to set up the phpBB software with postgreSQL on your server. This is not hard but you need to get your head around it.
-     -->
 
 <div id="tabs-3"><iframe src="http://www.lancs.ac.uk/staff/leedald/phpBB3" width="100%" height="1000px">
   <p>Your browser does not support iframes.</p>
 </iframe></div>
-    <!--
-     set up and link to the forth tab page which is the help. I havn't added any help information yet.
-     -->
 
-<div id="tabs-4"><h1>Help</h1>
-<p>This page will provide a short user friendly guide to using the visualisation tool</div>
+<div id="tabs-4"><h1>About</h1>
+<p>This web-based tool was built by David Leedal (Lancaster Environment Centre, Lancaster University) as part of the work carried out by the Flood Risk Management Research Consortium 2. The concept is to produce a means of communicating probabilistic flood risk modelling results in a user friendly and interactive way.<p>
+The original modelling study was carried out in LISFLOOD-FP by Jeff Neal (School of Geographical Sciences, Bristol University), with multivariate input flows calculated by Caroline Keef (JBA Consulting).<p>
+The flood inundation study estimated the probabilistic range of inundation resulting from the statistical properties of the 1%AEP inflows to Carlisle from the Eden, Caldew and Petteril. The results from the study were a set of 16 probability grids providing the estimated probability of exceedence for each of 16 depth values between 0 and 150cm. The grids cover an area of 4 x 6km at 10 x 10m resolution.
+The 16 grids were used to produce georeferenced overlay images of the exceedence extent at each percentile. This tool converts these to Google Map overlays and allows the user to select them easily using slider interfaces.<p>
+The data from the 16 grids is also loaded into a 3D JavaScript array (using JSON) which allows the user to inspect the probability of exceeding all the depth values at a specific point. This is done by converting the Google Coordinates into the appropriate <i>x,y</i> reference into the array and extracting the entries in the <i>z</i> dimension. These are then plotted using the Google Charts API.<p>
+The wiki and forum tabs are there to demonstrate that as well as statistical (aleatory) uncertainty, as dealt with and visualised by the model study and this tool, there is always a degree of knowledge-based (epistemic) uncertainty. This can be managed in more qualitative ways using discussion, investigation, debate, and opinion. The wiki and forum provide a space for this.<p>
+This work has a GNU General Public License v3.     
+</div>
 
 
 

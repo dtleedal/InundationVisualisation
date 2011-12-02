@@ -1,4 +1,7 @@
 //preload images
+oldDepthIndex = 0; 
+//probIncrement = 1;//the increment in the probability to make more or fewer overlay objects (min 1) 
+oldIndex = 15;//set up a global value for the first overlay to erase
 loadingPicture = new Image();
 loadingPicture.src = "ajax-loader.gif";//pre load the animated gif for the loading screen
 
@@ -10,7 +13,7 @@ var srcImageArray = "";
     for (var whichDepth = 1; whichDepth<17; whichDepth++){
        var folderName = ((whichDepth-1)*10)+"cm/";
        imageOverlay[whichDepth-1] = new Array(100);
-       for (var whichPercentile = 0; whichPercentile<100; whichPercentile=whichPercentile+probIncrement){
+       for (var whichPercentile=5; whichPercentile<96; whichPercentile=whichPercentile+probIncrement){
            
            overlayText = whichPercentile + 1;
            imageOverlay[whichDepth-1][whichPercentile] = new Image();
@@ -25,3 +28,5 @@ var srcImageArray = "";
     
  
     }
+
+
